@@ -18,7 +18,7 @@ pipeline {
             steps {
                 bat '''
                     FOR /F "tokens=*" %%i IN ('docker ps -q -f name=grocy-container') DO docker stop %%i & docker rm %%i
-                    docker run -d -p 8080:80 --name grocy-container grocy-website
+                    docker run -d -p 3000:80 --name grocy-container grocy-website
                 '''
             }
         }
