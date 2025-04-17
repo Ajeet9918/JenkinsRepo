@@ -7,6 +7,6 @@ RUN rm -rf ./*
 
 COPY . .
 
-EXPOSE 3000
+EXPOSE 80
 
 # Nginx starts by default, so no CMD needed
