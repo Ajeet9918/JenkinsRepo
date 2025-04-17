@@ -10,16 +10,14 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                sh 'docker build -t grocy-website .'
+                bat 'docker build -t grocy-website .'
             }
         }
 
         stage('Run Docker Container') {
             steps {
-                sh '''
-                    if [ $(docker ps -q -f name=grocy-container) ]; then
-                        docker stop grocy-container && docker rm grocy-container
-                    fi
+                bat '''
+                    FOR /F "tokens=*" %%i IN ('docker ps -q -f name=grocy-container') DO docker stop %%i & docker rm %%i
                     docker run -d -p 8080:80 --name grocy-container grocy-website
                 '''
             }
