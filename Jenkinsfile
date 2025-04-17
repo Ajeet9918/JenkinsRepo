@@ -20,7 +20,7 @@ pipeline {
 
         stage('Run Container') {
             steps {
-                bat 'docker run -d -p 5000:8000 --name grocery grocery'
+                bat 'docker run -d -p 5050:8000 --name grocery grocery'
             }
         }
     }
