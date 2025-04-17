@@ -1,17 +1,16 @@
 # Use official Nginx image
 FROM nginx:alpine
 
-# Remove the default nginx website
-RUN rm -rf /usr/share/nginx/html/*
+# Set working directory inside container
+WORKDIR /usr/share/nginx/html
 
-# Copy static website files
-COPY . /usr/share/nginx/html
+# Remove default Nginx static files
+RUN rm -rf ./*
 
-# Copy custom nginx config
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+# Copy your static files into the container
+COPY . .
 
 # Expose port 80
 EXPOSE 80
 
-# Start nginx server
-CMD ["nginx", "-g", "daemon off;"]
+# Nginx starts by default, so no CMD needed
