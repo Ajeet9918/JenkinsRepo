@@ -10,22 +10,18 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                script {
-                    dockerImage = docker.build("grocy-website")
-                }
+                sh 'docker build -t grocy-website .'
             }
         }
 
         stage('Run Docker Container') {
             steps {
-                script {
-                    sh '''
-                        if [ $(docker ps -q -f name=grocy-container) ]; then
-                            docker stop grocy-container && docker rm grocy-container
-                        fi
-                    '''
-                    dockerImage.run("-d -p 8080:80 --name grocy-container")
-                }
+                sh '''
+                    if [ $(docker ps -q -f name=grocy-container) ]; then
+                        docker stop grocy-container && docker rm grocy-container
+                    fi
+                    docker run -d -p 8080:80 --name grocy-container grocy-website
+                '''
             }
         }
     }
