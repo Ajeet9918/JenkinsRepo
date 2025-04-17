@@ -1,23 +1,17 @@
-# Use an official Node runtime as the base image
-FROM node:18
+# Use official Nginx image
+FROM nginx:alpine
 
-# Set the working directory
-WORKDIR /app
+# Remove the default nginx website
+RUN rm -rf /usr/share/nginx/html/*
 
-# Copy package files
-COPY package*.json ./
+# Copy static website files
+COPY . /usr/share/nginx/html
 
-# Install dependencies
-RUN npm install
+# Copy custom nginx config
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-# Copy the rest of the app
-COPY . .
-
-# Build the app (for React/Vue etc. you may use `npm run build`)
-RUN npm run build
-
-# Expose the app port
+# Expose port 80
 EXPOSE 80
 
-# Start the app
-CMD ["npm", "start"]
+# Start nginx server
+CMD ["nginx", "-g", "daemon off;"]

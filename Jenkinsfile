@@ -2,24 +2,25 @@ pipeline {
     agent any
 
     stages {
-        stage('Checkout') {
-            steps {
-                git branch: 'main', url: 'https://github.com/Ajeet9918/JenkinsRepo.git'
-            }
-        }
-
-        stage('Build Docker Image') {
-            steps {
-                bat 'docker build -t grocy-website .'
-            }
-        }
-
-        stage('Run Docker Container') {
+        stage('Docker Cleanup') {
             steps {
                 bat '''
-                    FOR /F "tokens=*" %%i IN ('docker ps -q -f name=grocy-container') DO docker stop %%i & docker rm %%i
-                    docker run -d -p 3000:80 --name grocy-container grocy-website
+                docker stop grocery || echo Container not running
+                docker rm grocery || echo No container to remove
+                docker rmi -f grocery || echo No image to remove
                 '''
+            }
+        }
+
+        stage('Build Image') {
+            steps {
+                bat 'docker build -t grocery .'
+            }
+        }
+
+        stage('Run Container') {
+            steps {
+                bat 'docker run -d -p 3000:80 --name grocery grocery'
             }
         }
     }
